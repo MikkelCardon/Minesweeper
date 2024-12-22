@@ -129,7 +129,7 @@ public class GameWindow {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("DU TABTE");
         alert.showAndWait();
-        //test
+        //NEW CODE
     }
 
     public Scene getScene() {
