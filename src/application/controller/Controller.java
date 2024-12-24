@@ -1,48 +1,52 @@
 package application.controller;
 
 import application.model.Cell;
+import application.model.Game;
 import application.model.GameSize;
 
 import java.util.*;
 
 public class Controller {
-
-    public static ArrayList<Cell> createNewGame(GameSize gameSize){
-        //ToDo: Skal lave x-antal nye celler
-        //ToDo: lave x-antal til bomber
-        ArrayList<Cell> cells = new ArrayList<>();
-        int numberOfCells = gameSize.getSize(); //Hvis getSize = 10, så er det 10x10 spil
-
-        for (int y = 0; y < numberOfCells; y++) {
-            for (int x = 0; x < numberOfCells; x++) {
-                Cell newCell = new Cell(x, y);
-                cells.add(newCell);
-                cellsCurrentGame.add(newCell);
-            }
-        }
-        setBombs(cells, gameSize);
-        return cells;
-    }
-
-    private static void setBombs(ArrayList<Cell> cells, GameSize gameSize) {
-        Random rand = new Random();
-        int maxSize = cells.size();
-
-        Set<Integer> randomIndex = new HashSet<>();
-        while (randomIndex.size() != gameSize.getAmountOfBombs()){
-            randomIndex.add(rand.nextInt(maxSize));
-        }
-
-        for (Integer index : randomIndex) {
-            cells.get(index).setBomb();
-        }
-        System.out.println(randomIndex);
-    }
-
-    private static ArrayList<Cell> cellsCurrentGame = new ArrayList<>();
-
-    public static ArrayList<Cell> getCellsCurrentGame() {
-        return  new ArrayList<>(cellsCurrentGame);
+        //ToDo: Controller createNewGame
+//    public static ArrayList<Cell> createNewGame(GameSize gameSize){
+//        //ToDo: Skal lave x-antal nye celler
+//        //ToDo: lave x-antal til bomber
+//        ArrayList<Cell> cells = new ArrayList<>();
+//        int numberOfCells = gameSize.getSize(); //Hvis getSize = 10, så er det 10x10 spil
+//
+//        for (int y = 0; y < numberOfCells; y++) {
+//            for (int x = 0; x < numberOfCells; x++) {
+//                Cell newCell = new Cell(x, y);
+//                cells.add(newCell);
+//                cellsCurrentGame.add(newCell);
+//            }
+//        }
+//        setBombs(cells, gameSize);
+//        return cells;
+//    }
+//
+//    private static void setBombs(ArrayList<Cell> cells, GameSize gameSize) {
+//        Random rand = new Random();
+//        int maxSize = cells.size();
+//
+//        Set<Integer> randomIndex = new HashSet<>();
+//        while (randomIndex.size() != gameSize.getAmountOfBombs()){
+//            randomIndex.add(rand.nextInt(maxSize));
+//        }
+//
+//        for (Integer index : randomIndex) {
+//            cells.get(index).setBomb();
+//        }
+//        System.out.println(randomIndex);
+//    }
+//
+//    private static ArrayList<Cell> cellsCurrentGame = new ArrayList<>();
+//
+//    public static ArrayList<Cell> getCellsCurrentGame() {
+//        return  new ArrayList<>(cellsCurrentGame);
+//    }
+    public static Game createNewGame(){
+        return new Game();
     }
 
     private static ArrayList<ArrayList<Integer>> positionsAroundCell = new ArrayList<>();
