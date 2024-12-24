@@ -20,16 +20,16 @@ public class Controller {
                 cellsCurrentGame.add(newCell);
             }
         }
-        setBombs(cells);
+        setBombs(cells, gameSize);
         return cells;
     }
 
-    private static void setBombs(ArrayList<Cell> cells) {
+    private static void setBombs(ArrayList<Cell> cells, GameSize gameSize) {
         Random rand = new Random();
         int maxSize = cells.size();
 
         Set<Integer> randomIndex = new HashSet<>();
-        while (randomIndex.size() != 10){
+        while (randomIndex.size() != gameSize.getAmountOfBombs()){
             randomIndex.add(rand.nextInt(maxSize));
         }
 
