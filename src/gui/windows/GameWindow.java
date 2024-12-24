@@ -161,6 +161,7 @@ public class GameWindow {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("DU TABTE");
         alert.showAndWait();
+        disableGame();
     }
     private void winAlert(){
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -209,5 +210,10 @@ public class GameWindow {
     private void restartGame(Stage primaryStage){
         StartWindow startWindow = new StartWindow(primaryStage);
         primaryStage.setScene(startWindow.getScene());
+    }
+    private void disableGame(){
+        for (StackPane stackPane : stackPaneArrayList) {
+            stackPane.setDisable(true);
+        }
     }
 }
