@@ -25,9 +25,10 @@ import java.util.Set;
 
 public class GameWindow {
     private Scene scene;
-    private GameSize gameSize = GameSize.SMALL;
+    private GameSize gameSize;
 
-    public GameWindow(Stage primaryStage) {
+    public GameWindow(Stage primaryStage, GameSize gameSize) {
+        this.gameSize = gameSize;
         GridPane gamePane = new GridPane();
         gamePane.setStyle("-fx-border-color: black; -fx-border-width: 2;");
         GridPane layoutPane = new GridPane();
@@ -60,7 +61,7 @@ public class GameWindow {
     public void initContent(GridPane pane) {
         //ToDO: Få GameSize fra StartWindow
 //        cells = Controller.createNewGame(gameSize);
-        cells = Controller.createNewGame().getCellsCurrentGame();
+        cells = Controller.createNewGame(gameSize).getCellsCurrentGame();
         cellWithBomb = getCellsWithBomb();
         for (Cell cell : cells) {
 

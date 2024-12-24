@@ -6,8 +6,9 @@ import java.util.Random;
 import java.util.Set;
 
 public class Game {
-    private GameSize gameSize = GameSize.SMALL;
-    public Game() {
+    private GameSize gameSize;
+    public Game(GameSize gameSize) {
+        this.gameSize = gameSize;
         createCells(gameSize);
     }
 

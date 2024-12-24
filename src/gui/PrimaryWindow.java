@@ -1,6 +1,7 @@
 package gui;
 
 import application.controller.Controller;
+import application.model.GameSize;
 import gui.windows.GameWindow;
 import gui.windows.StartWindow;
 import javafx.application.Application;
@@ -19,12 +20,12 @@ public class PrimaryWindow extends Application {
         primaryStage.show();
     }
 
-    public void showMainScene(Stage primaryStage) {
-        initGame(primaryStage);
+    public void showMainScene(Stage primaryStage, GameSize gameSize) {
+        initGame(primaryStage, gameSize);
     }
 
-    private void initGame(Stage primaryStage){
-        GameWindow GameWindow = new GameWindow(primaryStage);
+    private void initGame(Stage primaryStage, GameSize gameSize){
+        GameWindow GameWindow = new GameWindow(primaryStage, gameSize);
         primaryStage.setScene(GameWindow.getScene());
     }
 }
