@@ -1,12 +1,14 @@
 package application.model;
 
 public enum GameSize {
-    SMALL(5, 5), MEDIUM(10, 10), LARGE(20, 40);
+    SMALL(10, 15, "EASY"), MEDIUM(20, 40, "NORMAL"), LARGE(40, 160, "HARD");
 
+    private String beskrivelse;
     private int size;
     private int amountOfBombs;
 
-    GameSize(int size, int amountOfBombs) {
+    GameSize(int size, int amountOfBombs, String beskrivelse) {
+        this.beskrivelse = beskrivelse;
         this.size = size;
         this.amountOfBombs = amountOfBombs;
     }
@@ -17,5 +19,8 @@ public enum GameSize {
 
     public int getAmountOfBombs() {
         return amountOfBombs;
+    }
+    public String toString(){
+        return beskrivelse + ", " + size + "x" + size;
     }
 }
