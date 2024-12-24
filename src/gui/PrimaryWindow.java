@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class PrimaryWindow extends Application {
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Booking");
+        primaryStage.setTitle("Minesweeper");
 
         // Show the StartWindow scene first
         StartWindow startWindow = new StartWindow(primaryStage);

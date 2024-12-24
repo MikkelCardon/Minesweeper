@@ -12,10 +12,12 @@ public class Cell {
 
     private int x;
     private int y;
+    private Game game;
 
-    public Cell(int x, int y) {
+    public Cell(int x, int y, Game game) {
         this.x = x;
         this.y = y;
+        this.game = game;
     }
 
     public int getX() {
@@ -47,7 +49,7 @@ public class Cell {
     public boolean checkBombe(int xDif, int yDif){
         int xPos = x + xDif;
         int yPos = y + yDif;
-        for (Cell cell : Controller.getCellsCurrentGame()) {
+        for (Cell cell : game.getCellsCurrentGame()) {
             if (cell.getX() == xPos && cell.getY() == yPos){
                 return cell.isBombe;
             }
