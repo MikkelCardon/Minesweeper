@@ -6,6 +6,7 @@ import application.model.GameSize;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
@@ -30,7 +31,7 @@ public class GameWindow {
         GridPane gamePane = new GridPane();
         gamePane.setStyle("-fx-border-color: black; -fx-border-width: 2;");
         GridPane layoutPane = new GridPane();
-        initLayout(layoutPane);
+        initLayout(layoutPane, primaryStage);
         initContent(gamePane);
 
         VBox layout = new VBox(10);
@@ -46,8 +47,11 @@ public class GameWindow {
         primaryStage.show();
     }
 
-    private void initLayout(GridPane layoutPane) {
+    private void initLayout(GridPane layoutPane, Stage stage) {
         layoutPane.add(new Label("GAME: " + gameSize), 0, 0);
+        Button button = new Button("Genstart");
+        layoutPane.add(button, 0, 1);
+        button.setOnAction(event -> restartGame(stage));
     }
 
     private ArrayList<StackPane> stackPaneArrayList = new ArrayList<>();
@@ -55,7 +59,8 @@ public class GameWindow {
 
     public void initContent(GridPane pane) {
         //ToDO: Få GameSize fra StartWindow
-        cells = Controller.createNewGame(gameSize);
+//        cells = Controller.createNewGame(gameSize);
+        cells = Controller.createNewGame().getCellsCurrentGame();
         cellWithBomb = getCellsWithBomb();
         for (Cell cell : cells) {
 
@@ -137,9 +142,9 @@ public class GameWindow {
     private void checkIfEmpty(int xDif, int yDif, Cell currentCell){
         int xPos = currentCell.getX() + xDif;
         int yPos = currentCell.getY() + yDif;
-        for (Cell cell : Controller.getCellsCurrentGame()) {
+        for (Cell cell : cells) {
             if (cell.getX() == xPos && cell.getY() == yPos && (currentCell.getCellText().equals("0") || firstClick) && !cell.isShown() && !cell.isBombe()){
-                int index = Controller.getCellsCurrentGame().indexOf(cell);
+                int index = cells.indexOf(cell);
                 if (stackPaneArrayList.get(index).getUserData().equals("Flag")) return;
                 stackPaneArrayList.get(index).getChildren().removeLast();
                 cell.setShown(true);
@@ -199,5 +204,10 @@ public class GameWindow {
         if (shownCount == (cells.size()-cellWithBomb.size())){
             winAlert();
         }
+    }
+
+    private void restartGame(Stage primaryStage){
+        StartWindow startWindow = new StartWindow(primaryStage);
+        primaryStage.setScene(startWindow.getScene());
     }
 }
