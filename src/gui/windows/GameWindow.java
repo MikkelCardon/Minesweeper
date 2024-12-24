@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -40,9 +41,6 @@ public class GameWindow {
         layout.getChildren().add(layoutPane);
         layout.getChildren().add(gamePane);
 
-        //ToDo: Scene width og height kan tage parameter fra GameSize klassen.
-        int widthSize;
-        int heightSize;
         this.scene = new Scene(layout);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -59,8 +57,6 @@ public class GameWindow {
     private ArrayList<Cell> cells = new ArrayList<>();
 
     public void initContent(GridPane pane) {
-        //ToDO: Få GameSize fra StartWindow
-//        cells = Controller.createNewGame(gameSize);
         cells = Controller.createNewGame(gameSize).getCellsCurrentGame();
         cellWithBomb = getCellsWithBomb();
         for (Cell cell : cells) {
@@ -68,7 +64,8 @@ public class GameWindow {
             Rectangle rectangle = new Rectangle(25, 25);
             String cellText = cell.getCellText().equals("0") ? "" : cell.getCellText();
             Text text = new Text(cellText);
-
+            colorOfText(text, cell);
+            text.setFont(new Font(20));
             rectangle.setStyle("-fx-fill: grey; -fx-stroke: black; -fx-stroke-width: 1;");
             rectangle.setUserData(cell);
 
@@ -207,6 +204,16 @@ public class GameWindow {
             winAlert();
         }
     }
+    private void colorOfText(Text text, Cell cell){
+        String number = cell.getCellText();
+        Color color = switch (number) {
+            case "1" -> Color.BLUE;
+            case "2" -> Color.GREEN;
+            case "3" -> Color.RED;
+            default -> Color.BLACK;
+        };
+        text.setFill(color);
+    }
 
     private void restartGame(Stage primaryStage){
         StartWindow startWindow = new StartWindow(primaryStage);
@@ -217,4 +224,5 @@ public class GameWindow {
             stackPane.setDisable(true);
         }
     }
+
 }
