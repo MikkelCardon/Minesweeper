@@ -1,9 +1,12 @@
 package gui.windows;
 
 import application.controller.Controller;
+import application.controller.StopWatch;
 import application.model.Cell;
 import application.model.GameSize;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,11 +50,26 @@ public class GameWindow {
         primaryStage.show();
     }
 
+    //ToDo: Kan med fordel flyttes til component package, ny klasse der hedder Layout.
+    private int secondsElapsed = 0;
+    private Timeline timer;
     private void initLayout(GridPane layoutPane, Stage stage) {
         layoutPane.add(new Label("GAME: " + gameSize), 0, 0);
         Button button = new Button("Genstart");
         layoutPane.add(button, 0, 1);
         button.setOnAction(event -> restartGame(stage));
+
+        Label label = new Label("Time: ");
+        Label timeLabel = new Label("0");
+        layoutPane.add(label, 0, 2);
+        layoutPane.add(timeLabel, 1, 2);
+
+
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            secondsElapsed++;
+            timeLabel.setText(String.valueOf(secondsElapsed));
+        }));
+        timer.setCycleCount(Timeline.INDEFINITE);
     }
 
     private ArrayList<StackPane> stackPaneArrayList = new ArrayList<>();
@@ -97,7 +116,6 @@ public class GameWindow {
         if (cell.isBombe()){
             rectangle.setFill(Color.RED);
             lostAlert();
-            System.out.println("DU TABTE"); //TODO LOST-Metode
         } else{
             stackPane.getChildren().remove(1);
             revealEmptyCells(cell);
@@ -131,6 +149,10 @@ public class GameWindow {
 
     private boolean firstClick = true;
     private void revealEmptyCells(Cell cell){
+        if (firstClick){
+            StopWatch.start();
+            timer.play();
+        }
         for (ArrayList<Integer> position : Controller.getPositionsAroundCell()) {
             checkIfEmpty(position.get(0), position.get(1), cell);
         }
@@ -154,6 +176,7 @@ public class GameWindow {
     }
 
     private void lostAlert(){
+        stopTime();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -162,11 +185,14 @@ public class GameWindow {
         disableGame();
     }
     private void winAlert(){
+        stopTime();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Du vandt");
+        alert.setContentText("Din tid: " + StopWatch.durationSeconds() + " sekunder");
         alert.showAndWait();
+        disableGame();
     }
 
     public Scene getScene() {
@@ -224,5 +250,9 @@ public class GameWindow {
             stackPane.setDisable(true);
         }
     }
-
+    private void stopTime(){
+        timer.stop();
+        StopWatch.stop();
+        System.out.println(StopWatch.durationSeconds());
+    }
 }
