@@ -1,7 +1,7 @@
 package application.model;
 
 public enum GameSize {
-    SMALL(10, 15, "EASY"), MEDIUM(20, 40, "NORMAL"), LARGE(40, 160, "HARD");
+    SMALL(10, 15, "EASY"), MEDIUM(20, 40, "NORMAL"), LARGE(25, 99, "HARD");
 
     private String beskrivelse;
     private int size;
