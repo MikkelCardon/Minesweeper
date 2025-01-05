@@ -12,8 +12,8 @@ import javafx.util.Duration;
 
 public class GameOutput {
 
-    public static void lostAlert(GameWindow game, Timeline time){
-        stopTime(time);
+    public static void lostAlert(GameWindow game){
+        stopTime();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -21,8 +21,8 @@ public class GameOutput {
         alert.showAndWait();
         disableGame(game);
     }
-    public static void winAlert(GameWindow game, Timeline time){
-        stopTime(time);
+    public static void winAlert(GameWindow game){
+        stopTime();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -32,10 +32,9 @@ public class GameOutput {
         disableGame(game);
     }
 
-    private static void stopTime(Timeline timer){
-        timer.stop();
+    private static void stopTime(){
+        GameWindow.getTimer().stop();
         StopWatch.stop();
-        System.out.println(StopWatch.durationSeconds());
     }
 
     private static void disableGame(GameWindow gameWindow){

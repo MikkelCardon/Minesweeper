@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static application.model.ClickMethod.leftClick;
+import static application.model.ClickMethod.rightClick;
+
 public class GameWindow {
     private Scene scene;
     private GameSize gameSize;
@@ -48,7 +51,7 @@ public class GameWindow {
 
     //ToDo: Kan med fordel flyttes til component package, ny klasse der hedder Layout.
     private int secondsElapsed = 0;
-    private Timeline timer;
+    private static Timeline timer;
     private void initLayout(GridPane layoutPane, Stage stage) {
         layoutPane.add(new Label("GAME: " + gameSize), 0, 0);
         Button button = new Button("Genstart");
@@ -89,61 +92,16 @@ public class GameWindow {
             stackPaneArrayList.add(stackPane);
             stackPane.setUserData("noFlag");
             stackPane.setOnMouseClicked(event -> {
-                if (event.getButton() == MouseButton.PRIMARY) leftClick(stackPane);
-                else if (event.getButton() == MouseButton.SECONDARY) rightClick(stackPane);
+                if (event.getButton() == MouseButton.PRIMARY) leftClick(stackPane, this);
+                else if (event.getButton() == MouseButton.SECONDARY) rightClick(stackPane, this);
             });
             pane.add(stackPane, cell.getX(), cell.getY());
         }
     }
     private Set<Cell> placedFlags = new HashSet<>();
 
-    private void leftClick(StackPane stackPane) {
-        if (stackPane.getChildren().size() == 1) {
-            return;
-        }
-        if (stackPane.getUserData().equals("Flag")){
-            return;
-        }
-        Rectangle rectangle = (Rectangle) stackPane.getChildren().get(1);
-        Cell cell = (Cell) rectangle.getUserData();
-        cell.setShown(true);
-
-        if (cell.isBombe()){
-            rectangle.setFill(Color.RED);
-            GameOutput.lostAlert(this, timer);
-        } else{
-            stackPane.getChildren().remove(1);
-            revealEmptyCells(cell);
-            checkIfGameIsWon();
-        }
-    }
-
-    private void rightClick(StackPane stackPane) {
-        if (stackPane.getChildren().size() < 2){
-            return;
-        }
-        Rectangle rectangle = (Rectangle) stackPane.getChildren().get(1);
-        Cell cell = (Cell) rectangle.getUserData();
-        if (cell.isShown()){
-            return;
-        }
-
-        if (stackPane.getUserData().equals("Flag")){
-            stackPane.getChildren().removeLast();
-            stackPane.setUserData("noFlag");
-            placedFlags.remove(cell);
-            return;
-        }
-        Rectangle flag = new Rectangle(15, 15);
-        flag.setStyle("-fx-fill: green; -fx-stroke: black; -fx-stroke-width: 1;");
-        stackPane.getChildren().add(flag);
-        stackPane.setUserData("Flag");
-        placedFlags.add(cell);
-        checkIfGameIsWon();
-    }
-
     private boolean firstClick = true;
-    private void revealEmptyCells(Cell cell){
+    public void revealEmptyCells(Cell cell){
         if (firstClick){
             StopWatch.start();
             timer.play();
@@ -154,7 +112,7 @@ public class GameWindow {
         firstClick = false;
     }
 
-    private void checkIfEmpty(int xDif, int yDif, Cell currentCell){
+    public void checkIfEmpty(int xDif, int yDif, Cell currentCell){
         int xPos = currentCell.getX() + xDif;
         int yPos = currentCell.getY() + yDif;
         for (Cell cell : cells) {
@@ -204,7 +162,7 @@ public class GameWindow {
             }
         }
         if (shownCount == (cells.size()-cellWithBomb.size())){
-            GameOutput.winAlert(this, timer);
+            GameOutput.winAlert(this);
         }
     }
     private void colorOfText(Text text, Cell cell){
@@ -220,5 +178,13 @@ public class GameWindow {
 
     public ArrayList<StackPane> getStackPaneArrayList() {
         return stackPaneArrayList;
+    }
+
+    public static Timeline getTimer() {
+        return timer;
+    }
+
+    public Set<Cell> getPlacedFlags() {
+        return placedFlags;
     }
 }
