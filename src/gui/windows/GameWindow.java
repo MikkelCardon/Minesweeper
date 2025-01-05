@@ -53,13 +53,16 @@ public class GameWindow {
     private int secondsElapsed = 0;
     private static Timeline timer;
     private void initLayout(GridPane layoutPane, Stage stage) {
-        layoutPane.add(new Label("GAME: " + gameSize), 0, 0);
+        Label labelForGame = new Label("GAME: " + gameSize);
+        labelForGame.setStyle("-fx-font-size: 16px;");
+        layoutPane.add(labelForGame, 0, 0);
         Button button = new Button("Genstart");
         layoutPane.add(button, 0, 1);
         button.setOnAction(event -> GameOutput.restartGame(stage));
 
         Label label = new Label("Time: ");
         Label timeLabel = new Label("0");
+        timeLabel.setFont(new Font(20));
         layoutPane.add(label, 0, 2);
         layoutPane.add(timeLabel, 1, 2);
 
