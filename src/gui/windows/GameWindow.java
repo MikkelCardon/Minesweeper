@@ -3,12 +3,11 @@ package gui.windows;
 import application.controller.Controller;
 import application.controller.StopWatch;
 import application.model.Cell;
+import application.model.GameOutput;
 import application.model.GameSize;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -21,9 +20,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,13 +53,12 @@ public class GameWindow {
         layoutPane.add(new Label("GAME: " + gameSize), 0, 0);
         Button button = new Button("Genstart");
         layoutPane.add(button, 0, 1);
-        button.setOnAction(event -> restartGame(stage));
+        button.setOnAction(event -> GameOutput.restartGame(stage));
 
         Label label = new Label("Time: ");
         Label timeLabel = new Label("0");
         layoutPane.add(label, 0, 2);
         layoutPane.add(timeLabel, 1, 2);
-
 
         timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             secondsElapsed++;
@@ -115,7 +110,7 @@ public class GameWindow {
 
         if (cell.isBombe()){
             rectangle.setFill(Color.RED);
-            lostAlert();
+            GameOutput.lostAlert(this, timer);
         } else{
             stackPane.getChildren().remove(1);
             revealEmptyCells(cell);
@@ -175,30 +170,12 @@ public class GameWindow {
         }
     }
 
-    private void lostAlert(){
-        stopTime();
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.play();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("DU TABTE");
-        alert.showAndWait();
-        disableGame();
-    }
-    private void winAlert(){
-        stopTime();
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.play();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Du vandt");
-        alert.setContentText("Din tid: " + StopWatch.durationSeconds() + " sekunder");
-        alert.showAndWait();
-        disableGame();
-    }
-
     public Scene getScene() {
         return this.scene;
     }
+
     ArrayList<Cell> cellWithBomb = new ArrayList<>();
+
     public ArrayList<Cell> getCellsWithBomb(){
         ArrayList<Cell> cellBomb = new ArrayList<>();
         for (Cell cell : cells) {
@@ -227,7 +204,7 @@ public class GameWindow {
             }
         }
         if (shownCount == (cells.size()-cellWithBomb.size())){
-            winAlert();
+            GameOutput.winAlert(this, timer);
         }
     }
     private void colorOfText(Text text, Cell cell){
@@ -241,18 +218,7 @@ public class GameWindow {
         text.setFill(color);
     }
 
-    private void restartGame(Stage primaryStage){
-        StartWindow startWindow = new StartWindow(primaryStage);
-        primaryStage.setScene(startWindow.getScene());
-    }
-    private void disableGame(){
-        for (StackPane stackPane : stackPaneArrayList) {
-            stackPane.setDisable(true);
-        }
-    }
-    private void stopTime(){
-        timer.stop();
-        StopWatch.stop();
-        System.out.println(StopWatch.durationSeconds());
+    public ArrayList<StackPane> getStackPaneArrayList() {
+        return stackPaneArrayList;
     }
 }
