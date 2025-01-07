@@ -49,7 +49,6 @@ public class GameWindow {
         primaryStage.show();
     }
 
-    //ToDo: Kan med fordel flyttes til component package, ny klasse der hedder Layout.
     private int secondsElapsed = 0;
     private static Timeline timer;
     private void initLayout(GridPane layoutPane, Stage stage) {
@@ -101,9 +100,12 @@ public class GameWindow {
             pane.add(stackPane, cell.getX(), cell.getY());
         }
     }
-    private Set<Cell> placedFlags = new HashSet<>();
 
+
+
+    private Set<Cell> placedFlags = new HashSet<>();
     private boolean firstClick = true;
+
     public void revealEmptyCells(Cell cell){
         if (firstClick){
             StopWatch.start();
