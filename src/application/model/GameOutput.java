@@ -7,7 +7,10 @@ import gui.windows.StartWindow;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -22,14 +25,15 @@ public class GameOutput {
         alert.showAndWait();
         disableGame(game);
     }
+
     public static void winAlert(GameWindow game){
         stopTime();
-        Controller.createLeaderboard("Navn-test", StopWatch.getCurrentDurration());
+        Controller.createLeaderboard(StartWindow.getName().getText(), StopWatch.durationDouble());
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Du vandt");
-        alert.setContentText("Din tid: " + StopWatch.durationSeconds() + " sekunder");
+        alert.setContentText("Din tid: " + StopWatch.durationDouble() + " sekunder");
         alert.showAndWait();
         disableGame(game);
     }

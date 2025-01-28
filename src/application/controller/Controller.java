@@ -59,17 +59,20 @@ public class Controller {
 
     public static void updateLeaderboardFile(Leaderboard newTime){
         findPlacementInLeaderboard(newTime);
+        if (top3Leaderboard.size() == 4){
+            top3Leaderboard.removeLast();
+        }
         try (PrintWriter printWriter = new PrintWriter(new File("src/application/controller/leaderboard.txt"))){
             StringBuilder sb = new StringBuilder();
             for (Leaderboard leaderboard : top3Leaderboard) {
-                sb.append(leaderboard.getTime()+"/"+leaderboard.getName());
+                sb.append(leaderboard.getTime()+"/"+leaderboard.getName() + "\n");
             }
             printWriter.print(sb);
             printWriter.close();
         } catch (FileNotFoundException ex) {
             throw new RuntimeException(ex);
         }
-        System.out.println(top3Leaderboard);
+
     }
 
     public static void findPlacementInLeaderboard(Leaderboard newTime){
@@ -78,17 +81,14 @@ public class Controller {
             top3Leaderboard.add(newTime); return;
         }
         //If size is 2 or 3
-        if (top3Leaderboard.size() < 3){
-            if (top3Leaderboard.getFirst().getTime() > newTime.getTime()){
-                top3Leaderboard.addFirst(newTime); return;
-            }
-            else if(top3Leaderboard.getLast().getTime() < newTime.getTime()){
-                top3Leaderboard.add(newTime); return;
-            }
-            else {
-                top3Leaderboard.add(1, newTime); return;
-            }
+        if (top3Leaderboard.getFirst().getTime() > newTime.getTime()){
+            top3Leaderboard.addFirst(newTime); return;
         }
+        else if(top3Leaderboard.getLast().getTime() < newTime.getTime()){
+            top3Leaderboard.add(newTime); return;
+        }
+
+
         //If size is 3, find where new time fits inbetween
         for (int i = 0; i < top3Leaderboard.size()-1; i++) {
             if ((top3Leaderboard.get(i).getTime() < newTime.getTime()) && (top3Leaderboard.get(i+1).getTime() > newTime.getTime())){

@@ -25,4 +25,9 @@ public class StopWatch {
     public static long durationMilliSeconds() {
         return TimeUnit.MILLISECONDS.convert(stopTime - startTime, TimeUnit.NANOSECONDS);
     }
+
+    public static double durationDouble(){
+        double time = durationMilliSeconds() / 1000.0;
+        return Double.parseDouble(String.valueOf(time));
+    }
 }
