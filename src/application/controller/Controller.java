@@ -34,6 +34,12 @@ public class Controller {
     private static ArrayList<Leaderboard> allLeaderboardTries = new ArrayList<>();
     private static ArrayList<Leaderboard> top3Leaderboard = new ArrayList<>();
 
+    public static Leaderboard createLeaderboard(String name, double time){
+        Leaderboard leaderboard = new Leaderboard(name, time);
+        updateLeaderboardFile(leaderboard);
+        return leaderboard;
+    }
+
     public static void getLeaderboard() throws IOException {
         try(BufferedReader reader = new BufferedReader(new FileReader("src/application/controller/leaderboard.txt"))){
             top3Leaderboard = new ArrayList<>();
@@ -51,7 +57,7 @@ public class Controller {
     }
     public static Leaderboard findTryByID(String IDString){
         int id = Integer.parseInt(IDString);
-        for (Leaderboard currentTry : allLeaderboardTries) {
+        for (Leaderboard currentTry : top3Leaderboard) {
             if (currentTry.getTryID() == id){
                 return currentTry;
             }
@@ -71,6 +77,7 @@ public class Controller {
         } catch (FileNotFoundException ex) {
             throw new RuntimeException(ex);
         }
+        System.out.println(top3Leaderboard);
     }
 
     public static void findPlacementInLeaderboard(Leaderboard newTime){

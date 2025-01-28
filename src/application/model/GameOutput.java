@@ -1,5 +1,6 @@
 package application.model;
 
+import application.controller.Controller;
 import application.controller.StopWatch;
 import gui.windows.GameWindow;
 import gui.windows.StartWindow;
@@ -23,6 +24,7 @@ public class GameOutput {
     }
     public static void winAlert(GameWindow game){
         stopTime();
+        Controller.createLeaderboard("Navn-test", StopWatch.getCurrentDurration());
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
