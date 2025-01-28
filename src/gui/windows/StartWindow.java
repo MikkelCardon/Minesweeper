@@ -1,10 +1,13 @@
 package gui.windows;
 
+import application.controller.Controller;
 import application.model.GameSize;
+import application.model.Leaderboard;
 import gui.PrimaryWindow;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -28,8 +31,15 @@ public class StartWindow {
             mainApp.showMainScene(primaryStage, gameSize);
         });
 
+        VBox leaderboard = new VBox();
+        for (Leaderboard leaderboardPlacement : Controller.getTop3Leaderboard()) {
+            Label label = new Label(leaderboardPlacement.toString());
+            leaderboard.getChildren().add(label);
+        }
+
         layout.getChildren().add(startButton);
         layout.getChildren().add(comboBox);
+        layout.getChildren().add(leaderboard);
         ArrayList<GameSize> gameSizes = new ArrayList<>(Arrays.asList(GameSize.SMALL, GameSize.MEDIUM, GameSize.LARGE));
         comboBox.getItems().setAll(gameSizes);
         comboBox.setValue(gameSize);

@@ -6,6 +6,7 @@ import application.model.Leaderboard;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Controller {
     public static Game createNewGame(GameSize gameSize){
@@ -45,24 +46,15 @@ public class Controller {
             top3Leaderboard = new ArrayList<>();
             String line;
 
-            while((line = reader.readLine()) != null){
-                Leaderboard current = findTryByID(line);
-                if (current != null) {
-                    top3Leaderboard.add(current);
-                }
+            while((line = reader.readLine()) != null && !line.equals("")){
+                String[] splittet = line.split("/");
+                double time = Double.parseDouble(splittet[0]);
+                top3Leaderboard.add(new Leaderboard(splittet[1], time));
             }
         } catch (IOException ex){
             System.out.println("ERROR:     "  + ex.getMessage());
         }
-    }
-    public static Leaderboard findTryByID(String IDString){
-        int id = Integer.parseInt(IDString);
-        for (Leaderboard currentTry : top3Leaderboard) {
-            if (currentTry.getTryID() == id){
-                return currentTry;
-            }
-        }
-        return null;
+        System.out.println(top3Leaderboard);
     }
 
     public static void updateLeaderboardFile(Leaderboard newTime){
@@ -70,7 +62,7 @@ public class Controller {
         try (PrintWriter printWriter = new PrintWriter(new File("src/application/controller/leaderboard.txt"))){
             StringBuilder sb = new StringBuilder();
             for (Leaderboard leaderboard : top3Leaderboard) {
-                sb.append(leaderboard.getTryID() + "\n");
+                sb.append(leaderboard.getTime()+"/"+leaderboard.getName());
             }
             printWriter.print(sb);
             printWriter.close();
@@ -103,5 +95,9 @@ public class Controller {
                 top3Leaderboard.add(i+1, newTime); return;
             }
         }
+    }
+
+    public static ArrayList<Leaderboard> getTop3Leaderboard() {
+        return top3Leaderboard;
     }
 }

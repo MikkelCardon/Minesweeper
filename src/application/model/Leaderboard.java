@@ -23,6 +23,10 @@ public class Leaderboard {
         return tryID;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String toString(){
         return time + " - " + name;
     }
