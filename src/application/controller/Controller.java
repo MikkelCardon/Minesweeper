@@ -60,6 +60,20 @@ public class Controller {
     }
 
     public static void updateLeaderboardFile(Leaderboard newTime){
+        findPlacementInLeaderboard(newTime);
+        try (PrintWriter printWriter = new PrintWriter(new File("src/application/controller/leaderboard.txt"))){
+            StringBuilder sb = new StringBuilder();
+            for (Leaderboard leaderboard : top3Leaderboard) {
+                sb.append(leaderboard.getTryID() + "\n");
+            }
+            printWriter.print(sb);
+            printWriter.close();
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void findPlacementInLeaderboard(Leaderboard newTime){
         //If leaderboard is empty
         if (top3Leaderboard.isEmpty()){
             top3Leaderboard.add(newTime); return;
@@ -73,13 +87,13 @@ public class Controller {
                 top3Leaderboard.add(newTime); return;
             }
             else {
-                top3Leaderboard.add(1, newTime);
+                top3Leaderboard.add(1, newTime); return;
             }
         }
         //If size is 3, find where new time fits inbetween
         for (int i = 0; i < top3Leaderboard.size()-1; i++) {
             if ((top3Leaderboard.get(i).getTime() < newTime.getTime()) && (top3Leaderboard.get(i+1).getTime() > newTime.getTime())){
-                top3Leaderboard.add(i+1, newTime);
+                top3Leaderboard.add(i+1, newTime); return;
             }
         }
     }
