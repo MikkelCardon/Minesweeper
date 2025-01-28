@@ -18,6 +18,11 @@ public class Leaderboard {
     public double getTime() {
         return time;
     }
+
+    public int getTryID() {
+        return tryID;
+    }
+
     public String toString(){
         return time + " - " + name;
     }
