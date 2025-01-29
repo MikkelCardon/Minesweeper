@@ -28,7 +28,7 @@ public class Leaderboard {
     }
 
     public String toString(){
-        return time + " - " + name;
+        return time + "s - " + name;
     }
 
 }
