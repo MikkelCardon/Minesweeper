@@ -32,7 +32,6 @@ public class Controller {
         return new ArrayList<>(positionsAroundCell);
     }
 
-    private static ArrayList<Leaderboard> allLeaderboardTries = new ArrayList<>();
     private static ArrayList<Leaderboard> top3Leaderboard = new ArrayList<>();
 
     public static Leaderboard createLeaderboard(String name, double time){
@@ -87,7 +86,6 @@ public class Controller {
         else if(top3Leaderboard.getLast().getTime() < newTime.getTime()){
             top3Leaderboard.add(newTime); return;
         }
-
 
         //If size is 3, find where new time fits inbetween
         for (int i = 0; i < top3Leaderboard.size()-1; i++) {
