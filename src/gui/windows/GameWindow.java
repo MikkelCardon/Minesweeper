@@ -3,6 +3,7 @@ package gui.windows;
 import application.controller.Controller;
 import application.controller.StopWatch;
 import application.model.Cell;
+import application.model.Game;
 import application.model.GameOutput;
 import application.model.GameSize;
 import javafx.animation.KeyFrame;
@@ -74,15 +75,16 @@ public class GameWindow {
 
     private ArrayList<StackPane> stackPaneArrayList = new ArrayList<>();
     private ArrayList<Cell> cells = new ArrayList<>();
+    private Game game;
 
     public void initContent(GridPane pane) {
-        cells = Controller.createNewGame(gameSize).getCellsCurrentGame();
+        game = Controller.createNewGame(gameSize);
+        cells = game.getCellsCurrentGame();
         cellWithBomb = getCellsWithBomb();
         for (Cell cell : cells) {
 
             Rectangle rectangle = new Rectangle(25, 25);
-            String cellText = cell.getCellText().equals("0") ? "" : cell.getCellText();
-            Text text = new Text(cellText);
+            Text text = new Text();
             colorOfText(text, cell);
             text.setFont(new Font(20));
             rectangle.setStyle("-fx-fill: grey; -fx-stroke: black; -fx-stroke-width: 1;");
@@ -100,16 +102,30 @@ public class GameWindow {
             pane.add(stackPane, cell.getX(), cell.getY());
         }
     }
+    public void setText(){
+        for (StackPane stackPane : stackPaneArrayList) {
+            int index = stackPaneArrayList.indexOf(stackPane);
+                Text text = (Text) stackPane.getChildren().getFirst();
+                String cellBombs = cells.get(index).getCellText().equals("0") ? "" : cells.get(index).getCellText();
+                text.setText(cellBombs);
+                colorOfText(text, cells.get(index));
+        }
 
-
+    }
 
     private Set<Cell> placedFlags = new HashSet<>();
     private boolean firstClick = true;
+    private boolean bombsSet = false;
 
     public void revealEmptyCells(Cell cell){
         if (firstClick){
             StopWatch.start();
             timer.play();
+            if (!bombsSet){
+                game.setBombs(gameSize, cell);
+                setText();
+                bombsSet = true;
+            }
         }
         for (ArrayList<Integer> position : Controller.getPositionsAroundCell()) {
             checkIfEmpty(position.get(0), position.get(1), cell);

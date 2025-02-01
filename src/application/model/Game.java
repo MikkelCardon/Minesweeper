@@ -14,32 +14,32 @@ public class Game {
 
     private ArrayList<Cell> cellsCurrentGame = new ArrayList<>();
 
-    public ArrayList<Cell> createCells(GameSize gameSize){
+    public void createCells(GameSize gameSize){
         ArrayList<Cell> cells = new ArrayList<>();
         int numberOfCells = gameSize.getSize(); //Hvis getSize = 10, så er det 10x10 spil
 
         for (int y = 0; y < numberOfCells; y++) {
             for (int x = 0; x < numberOfCells; x++) {
                 Cell newCell = new Cell(x, y, this);
-                cells.add(newCell);
                 cellsCurrentGame.add(newCell);
             }
         }
-        setBombs(cells, gameSize);
-        return cells;
     }
 
-    private void setBombs(ArrayList<Cell> cells, GameSize gameSize) {
+    public void setBombs(GameSize gameSize, Cell firstCell) {
         Random rand = new Random();
-        int maxSize = cells.size();
+        int maxSize = cellsCurrentGame.size();
 
         Set<Integer> randomIndex = new HashSet<>();
         while (randomIndex.size() != gameSize.getAmountOfBombs()){
-            randomIndex.add(rand.nextInt(maxSize));
+            int indexOfNewBomb = rand.nextInt(maxSize);
+            if (indexOfNewBomb != (firstCell.getX() + firstCell.getY()* gameSize.getSize())){
+                randomIndex.add(indexOfNewBomb);
+            }
         }
 
         for (Integer index : randomIndex) {
-            cells.get(index).setBomb();
+            cellsCurrentGame.get(index).setBomb();
         }
         System.out.println(randomIndex);
     }
