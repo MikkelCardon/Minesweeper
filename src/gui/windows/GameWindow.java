@@ -80,7 +80,6 @@ public class GameWindow {
     public void initContent(GridPane pane) {
         game = Controller.createNewGame(gameSize);
         cells = game.getCellsCurrentGame();
-        cellWithBomb = getCellsWithBomb();
         for (Cell cell : cells) {
 
             Rectangle rectangle = new Rectangle(25, 25);
@@ -125,6 +124,7 @@ public class GameWindow {
                 game.setBombs(gameSize, cell);
                 setText();
                 bombsSet = true;
+                cellWithBomb = getCellsWithBomb();
             }
         }
         for (ArrayList<Integer> position : Controller.getPositionsAroundCell()) {

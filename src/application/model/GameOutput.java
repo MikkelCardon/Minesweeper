@@ -28,12 +28,17 @@ public class GameOutput {
 
     public static void winAlert(GameWindow game){
         stopTime();
-        Controller.createLeaderboard(StartWindow.getName().getText(), StopWatch.durationDouble());
+        Leaderboard currentGame = Controller.createLeaderboard(StartWindow.getName().getText(), StopWatch.durationDouble());
+
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.play();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Du vandt");
         alert.setContentText("Din tid: " + StopWatch.durationDouble() + " sekunder");
+        if (Controller.getTop3Leaderboard().contains(currentGame)){
+            int placement = Controller.getTop3Leaderboard().indexOf(currentGame)+1;
+            alert.setHeaderText("Du fik en " + placement + " plads!!");
+        }
         alert.showAndWait();
         disableGame(game);
     }
